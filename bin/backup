@@ -1,0 +1,82 @@
+#!/usr/bin/env ruby
+
+require 'thor'
+
+require 'io/console'
+
+# Find the backup drive in /Volumes
+# Check diff with Media to see if you can do a --delete
+# Backup to 
+#
+class Backup
+
+
+
+  def backup
+  end
+
+end
+
+class CLI < Thor
+  BACK_UP_ROOT = "/Volumes/M"
+  BACK_UP_EXT = "[1-2][0-9]"
+  SOURCE_DIR_ROOT = "/Volumes/Media/"
+  @@command = %w{rsync -av}
+
+  desc "backup", "from #{SOURCE_DIR_ROOT} to #{BACK_UP_ROOT}#{BACK_UP_EXT}"
+  option "dry-run"
+  option :delete
+  def backup
+    backup_disks = Dir["#{BACK_UP_ROOT}#{BACK_UP_EXT}"]
+    if backup_disks.empty?
+      puts "Missing backup drive: #{BACK_UP_ROOT}#{BACK_UP_EXT}"
+      exit 1
+    end
+
+    commands = []
+    backup_disks.each do |item|
+      year = "20#{item[-2..-1]}"
+      source = "#{SOURCE_DIR_ROOT}#{year}"
+      commands.push(@@command + opts(item) + [source, item])
+    end
+
+    puts commands.map {|item| item.join ' '}.join
+    print "Continue (Y/n): "
+    if STDIN.getch == 'n'
+      puts
+      exit 1
+    end
+    puts
+
+    pids = []
+    commands.each do |item|
+      pids << spawn(*item)
+    end
+
+    pids.each do |item|
+      Process.wait item
+    end
+
+  end
+
+  no_commands do
+
+    def opts(backup_disk)
+      opts = []
+      if options["dry-run"]
+        opts << "--dry-run"
+      end
+      if options[:delete]
+        opts += %W{--delete --backup --backup-dir=#{backup_disk}/trash}
+      end
+      opts
+    end
+
+  end
+
+  default_task :backup
+
+end
+
+
+CLI.start
