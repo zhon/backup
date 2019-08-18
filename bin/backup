@@ -21,7 +21,7 @@ class CLI < Thor
   BACK_UP_ROOT = "/Volumes/M"
   BACK_UP_EXT = "[1-2][0-9]"
   SOURCE_DIR_ROOT = "/Volumes/Media/"
-  @@command = %w{rsync -av}
+  @@command = %w{rsync -av --exclude .DS_STORE }
 
   desc "backup", "from #{SOURCE_DIR_ROOT} to #{BACK_UP_ROOT}#{BACK_UP_EXT}"
   option "dry-run"
