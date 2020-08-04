@@ -24,8 +24,8 @@ class CLI < Thor
   @@command = %w{rsync -av --exclude .DS_STORE }
 
   desc "backup", "from #{SOURCE_DIR_ROOT} to #{BACK_UP_ROOT}#{BACK_UP_EXT}"
-  option "dry-run"
-  option :delete
+  option 'dry-run', alias: '-d', type: :boolean, desc: "perform a trial run with no changes made"
+  option :delete, desc: 'delete extraneous files from dest dirs'
   def backup
     backup_disks = Dir["#{BACK_UP_ROOT}#{BACK_UP_EXT}"]
     if backup_disks.empty?
