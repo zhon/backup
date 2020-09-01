@@ -25,35 +25,36 @@ class CLI < Thor
   option :delete, desc: 'delete extraneous files from dest dirs'
   option :dest, desc: 'backup to this distination'
   def backup
-    backup_disks = Backup::DriveFinder.new(options[:dest]).dirs
+    begin
+      backup_disks = Backup::DriveFinder.new(options[:dest]).dirs
 
-    if backup_disks.empty?
-      puts "Missing backup drive: #{BACK_UP_ROOT}#{BACK_UP_EXT}"
-      exit 1
-    end
+      commands = []
+      backup_disks.each do |item|
+        year = "20#{item[-2..-1]}"
+        source = "#{SOURCE_DIR_ROOT}#{year}"
+        commands.push(@@command + opts(item) + [source, item])
+      end
 
-    commands = []
-    backup_disks.each do |item|
-      year = "20#{item[-2..-1]}"
-      source = "#{SOURCE_DIR_ROOT}#{year}"
-      commands.push(@@command + opts(item) + [source, item])
-    end
-
-    puts commands.map {|item| item.join ' '}.join
-    print "Continue (Y/n): "
-    if STDIN.getch == 'n'
+      puts commands.map {|item| item.join ' '}.join
+      print "Continue (Y/n): "
+      if STDIN.getch == 'n'
+        puts
+        exit 1
+      end
       puts
+
+      pids = []
+      commands.each do |item|
+        pids << spawn(*item)
+      end
+
+      pids.each do |item|
+        Process.wait item
+      end
+
+    rescue Backup::Error => err
+      p err.message
       exit 1
-    end
-    puts
-
-    pids = []
-    commands.each do |item|
-      pids << spawn(*item)
-    end
-
-    pids.each do |item|
-      Process.wait item
     end
 
   end
