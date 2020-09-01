@@ -4,10 +4,10 @@ module Backup
 
   describe 'DriveFinder' do
 
-      it "has default args that match /Volumes" do
-        default = DriveFinder::BACK_UP_ROOT + DriveFinder::BACK_UP_EXT
-        assert_equal "/Volumes/M[1-2][0-9]", default
-      end
+    it "has default args that match /Volumes" do
+      default = DriveFinder::BACK_UP_ROOT + DriveFinder::BACK_UP_EXT
+      assert_equal "/Volumes/M[1-2][0-9]", default
+    end
 
 
     describe 'with overridden system calls' do
