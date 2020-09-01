@@ -2,7 +2,7 @@ require 'test_helper'
 
 module Backup
 
-  describe 'DriveFinder' do
+  describe DriveFinder do
 
     it "has default args that match /Volumes" do
       default = DriveFinder::BACK_UP_ROOT + DriveFinder::BACK_UP_EXT

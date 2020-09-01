@@ -30,8 +30,7 @@ class CLI < Thor
 
       commands = []
       backup_disks.each do |item|
-        year = "20#{item[-2..-1]}"
-        source = "#{SOURCE_DIR_ROOT}#{year}"
+        source = Backup::Mapper.new.find_src(item)
         commands.push(@@command + opts(item) + [source, item])
       end
 
