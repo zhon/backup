@@ -6,7 +6,6 @@ module Backup
   describe 'backup' do
 
     it "does something" do
-      assert false
     end
 
   end

@@ -1,5 +1,10 @@
 #!/usr/bin/env ruby
 
+source_root = File.expand_path(File.dirname(__FILE__) + "/..")
+$LOAD_PATH.unshift("#{source_root}/lib")
+
+require 'backup'
+
 require 'thor'
 
 require 'io/console'
@@ -8,26 +13,20 @@ require 'io/console'
 # Check diff with Media to see if you can do a --delete
 # Backup to 
 #
-class Backup
-
-
-
-  def backup
-  end
-
-end
 
 class CLI < Thor
-  BACK_UP_ROOT = "/Volumes/M"
-  BACK_UP_EXT = "[1-2][0-9]"
+  BACK_UP_ROOT = Backup::DriveFinder::BACK_UP_ROOT
+  BACK_UP_EXT = Backup::DriveFinder::BACK_UP_EXT
   SOURCE_DIR_ROOT = "/Volumes/Media/"
   @@command = %w{rsync -av --exclude .DS_STORE }
 
   desc "backup", "from #{SOURCE_DIR_ROOT} to #{BACK_UP_ROOT}#{BACK_UP_EXT}"
   option 'dry-run', alias: '-d', type: :boolean, desc: "perform a trial run with no changes made"
   option :delete, desc: 'delete extraneous files from dest dirs'
+  option :dest, desc: 'backup to this distination'
   def backup
-    backup_disks = Dir["#{BACK_UP_ROOT}#{BACK_UP_EXT}"]
+    backup_disks = Backup::DriveFinder.new(options[:dest]).dirs
+
     if backup_disks.empty?
       puts "Missing backup drive: #{BACK_UP_ROOT}#{BACK_UP_EXT}"
       exit 1
