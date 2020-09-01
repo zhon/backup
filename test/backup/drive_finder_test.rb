@@ -27,6 +27,15 @@ module Backup
       assert_equal result, finder.dirs
     end
 
+    it "removes trailing slash from destination" do
+      finder = DriveFinder.new '/*/'
+      dirs = finder.dirs
+      refute dirs.empty?
+      dirs.each do |item|
+        refute_match /\/$/, item
+      end
+    end
+
 
     describe 'with overridden system calls' do
 
