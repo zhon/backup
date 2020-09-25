@@ -6,7 +6,7 @@ module Backup
 
     it "has default args that match /Volumes" do
       default = DriveFinder::BACK_UP_ROOT + DriveFinder::BACK_UP_EXT
-      assert_equal "/Volumes/M[1-2][0-9]", default
+      assert_equal "/Volumes/M[1-2][0-9]{,-{2,3}}", default
     end
 
     it "raises exception when no destination locations are found" do
