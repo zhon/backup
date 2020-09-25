@@ -27,12 +27,7 @@ class CLI < Thor
   def backup
     begin
       backup_disks = Backup::DriveFinder.new(options[:dest]).dirs
-
-      commands = []
-      backup_disks.each do |item|
-        source = Backup::Mapper.new.find_src(item)
-        commands.push(@@command + opts(item) + [source, item])
-      end
+      commands = Backup::CommandsBuilder.new(backup_disks, options).commands
 
       puts commands.map {|item| item.join ' '}.join
       print "Continue (Y/n): "
@@ -54,21 +49,6 @@ class CLI < Thor
     rescue Backup::Error => err
       p err.message
       exit 1
-    end
-
-  end
-
-  no_commands do
-
-    def opts(backup_disk)
-      opts = []
-      if options["dry-run"]
-        opts << "--dry-run"
-      end
-      if options[:delete]
-        opts += %W{--delete --backup --backup-dir=#{backup_disk}/trash}
-      end
-      opts
     end
 
   end
