@@ -37,5 +37,31 @@ module Backup
       assert_equal source, Mapper.new.find_src(destination)
     end
 
+    describe 'find_catalog' do
+
+      it "finds catalog on source" do
+        stub(Dir).glob { ['somepath/catalog.lrcat'] }
+        assert_equal 'somepath/catalog.lrcat', Mapper.new.find_catalog
+      end
+
+      it "Dir.glob is called with default location" do
+        mock(Dir).glob( '/Volumes/Media/*.lrcat') {["dir"]}
+
+        Mapper.new.find_catalog
+      end
+
+    end
+
+    describe 'is_current_year?' do
+
+      it "returns true for current year" do
+        Timecop.freeze(Time.new(2019, 1, 1)) do
+          destination = '/Volumes/M19-3'
+          assert_equal true, Mapper.new.is_current_year?(destination)
+        end
+      end
+
+    end
+
   end
 end

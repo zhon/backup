@@ -13,9 +13,17 @@ module Backup
       source = "#{@root}#{year}"
     end
 
+    def find_catalog
+      Dir.glob(SOURCE_DIR_ROOT + '*.lrcat')[0]
+    end
+
     def two_digit_year dest
       dest =~ /.*M(\d\d)/
       $1
+    end
+
+    def is_current_year?(backup_disk)
+      two_digit_year(backup_disk) == Date.today.year.to_s[-2..-1]
     end
 
   end

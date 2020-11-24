@@ -7,3 +7,4 @@ require "rr"
 
 require 'rantly'
 require 'rantly/minitest_extensions'
+require 'timecop'

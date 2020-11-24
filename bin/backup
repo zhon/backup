@@ -29,7 +29,7 @@ class CLI < Thor
       backup_disks = Backup::DriveFinder.new(options[:dest]).dirs
       commands = Backup::CommandsBuilder.new(backup_disks, options).commands
 
-      puts commands.map {|item| item.join ' '}.join
+      puts commands.map {|item| item.join ' '}.join("\n")
       print "Continue (Y/n): "
       if STDIN.getch == 'n'
         puts

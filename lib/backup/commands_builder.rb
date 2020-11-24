@@ -1,3 +1,4 @@
+require 'date'
 
 module Backup
 
@@ -11,12 +12,18 @@ module Backup
     end
 
     def commands
+      mapper = Mapper.new
       commands = []
       @backup_disks.each do |item|
-        source = Backup::Mapper.new.find_src(item)
-        commands.push(@@command + opts(item) + [source, item])
+        source = mapper.find_src(item)
+        commands.push build_command source, item
+        commands.push build_command mapper.find_catalog, item if mapper.is_current_year?(item)
       end
       commands
+    end
+
+    def build_command(source, destination, is_catalog=false)
+      @@command + opts(destination) + [source, destination]
     end
 
     def opts(backup_disk)
