@@ -7,6 +7,8 @@ require 'backup'
 
 require 'thor'
 
+require 'threadpool'
+
 require 'io/console'
 
 # Find the backup drive in /Volumes
@@ -25,32 +27,22 @@ class CLI < Thor
   option :delete, desc: 'delete extraneous files from dest dirs'
   option :dest, desc: 'backup to this distination'
   def backup
-    begin
-      backup_disks = Backup::DriveFinder.new(options[:dest]).dirs
-      commands = Backup::CommandsBuilder.new(backup_disks, options).commands
+    backup_disks = Backup::DriveFinder.new(options[:dest]).dirs
+    cb = Backup::CommandsBuilder.new(backup_disks, options)
+    #commands = Backup::CommandsBuilder.new(backup_disks, options).commands
 
-      puts commands.map {|item| item.join ' '}.join("\n")
-      print "Continue (Y/n): "
-      if STDIN.getch == 'n'
-        puts
-        exit 1
-      end
+    puts cb
+    print "Continue (Y/n): "
+    if STDIN.getch == 'n'
       puts
-
-      pids = []
-      commands.each do |item|
-        pids << spawn(*item)
-      end
-
-      pids.each do |item|
-        Process.wait item
-      end
-
-    rescue Backup::Error => err
-      p err.message
       exit 1
     end
+    puts
 
+    tp = ThreadPool.new(2)
+    cb.to_procs.map { |item| tp.push item }
+    tp.process
+    tp.finish
   end
 
   default_task :backup
