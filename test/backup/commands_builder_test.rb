@@ -4,13 +4,11 @@ module Backup
 
   describe CommandsBuilder do
 
-    describe 'commands' do
+    describe 'commands_array_builder' do
 
       it "with empty backup disks return no commands" do
         backup_disks = []
-
-        cb = CommandsBuilder.new backup_disks
-        commands = cb.commands
+        commands = CommandsBuilder::commands_array_builder(backup_disks, {})
         assert_equal [], commands
       end
 
@@ -21,9 +19,9 @@ module Backup
           'dry-run' => true
         }
 
-        cb = CommandsBuilder.new backup_disks, options
+        commands = CommandsBuilder::commands_array_builder(backup_disks, options)
 
-        command = cb.commands[0].flatten
+        command = commands[0].flatten
         assert_includes command, '--delete'
         assert_includes command, '--dry-run'
         assert_includes command, "--backup-dir=#{backup_disks[0]}/trash"
@@ -35,11 +33,11 @@ module Backup
           delete: true,
         }
 
-        cb = CommandsBuilder.new backup_disks, options
+        commands = CommandsBuilder::commands_array_builder(backup_disks, options)
 
-        command = cb.commands[0][0]
+        command = commands[0][0]
         refute_includes command, '--delete'
-        command = cb.commands[0][1].flatten
+        command = commands[0][1].flatten
         assert_includes command, '--delete'
       end
 
@@ -48,13 +46,13 @@ module Backup
           ENV["TMPDIR"] + "M20",
           ENV["TMPDIR"] + "M21"
         ]
+        options = {}
 
         any_instance_of(Mapper) do |m|
           stub(m).is_current_year? { false }
         end
 
-        cb = CommandsBuilder.new backup_disks
-        commands = cb.commands
+        commands = CommandsBuilder::commands_array_builder(backup_disks, options)
         assert_equal 2, commands.size
         assert_equal "M20", commands[0][0][-1][-3..-1]
         assert_equal "M21", commands[1][0][-1][-3..-1]
@@ -64,10 +62,10 @@ module Backup
         backup_disks = [
           ENV["TMPDIR"] + "M19",
         ]
+        options = {}
 
         Timecop.freeze(Time.new(2019, 1, 1)) do
-          cb = CommandsBuilder.new backup_disks
-          commands = cb.commands
+          commands = CommandsBuilder::commands_array_builder(backup_disks, options)
           assert_equal 2, commands.size
         end
       end
@@ -81,7 +79,7 @@ module Backup
         backup_disks = [ ENV["TMPDIR"] + "M19" ]
         options = {
           delete: true,
-        }
+        }.freeze
 
         cb = CommandsBuilder.new backup_disks, options
         assert_match /rsync.* && rsync.*--delete/, cb.to_s
@@ -92,7 +90,6 @@ module Backup
     describe "to_procs" do
 
       it "to_procs will produce array of arrays of procs" do
-        skip
         commands = [[
           ["rsync", "-av", "--exclude", ".DS_STORE", "/Volumes/Media/2020", "/some tmp location/M20"]
         ],
@@ -100,16 +97,11 @@ module Backup
           ["rsync", "-av", "--exclude", ".DS_STORE", "/Volumes/Media/2021", "/some tmp location/M21"]
         ]]
 
-        result = CommandsBuilder::to_procs(commands)
+        stub(CommandsBuilder).commands_array_builder { commands }
+
+        result = CommandsBuilder.new([]).to_procs
         assert_kind_of Proc, result[0]
       end
-
-
-      it "is a dummy test to DELETE" do
-        skip
-
-      end
-
 
     end
 
