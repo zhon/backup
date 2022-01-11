@@ -4,7 +4,7 @@ module Backup
 
   class CommandsBuilder
 
-    @@command = %w{rsync -av --exclude .DS_STORE }
+    @@command = %w{rsync -av --exclude '.DS_Store' --exclude '.Trashes' --exclude '.TemporaryItems' --exclude '.fsenventsd' }
     @@backup_dir = '/trash'
 
     def self.commands_array_builder backup_disks, options
