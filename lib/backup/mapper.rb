@@ -2,7 +2,7 @@
 module Backup
 
   class Mapper
-    SOURCE_DIR_ROOT = "/Volumes/Media/"
+    SOURCE_DIR_ROOT = "/Volumes/media/"
 
     def initialize root=SOURCE_DIR_ROOT
       @root = root

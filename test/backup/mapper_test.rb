@@ -21,19 +21,19 @@ module Backup
 
     it "maps destination to source" do
       destination = '/Volumes/M19'
-      source = '/Volumes/Media/2019'
+      source = '/Volumes/media/2019'
       assert_equal source, Mapper.new.find_src(destination)
     end
 
     it "maps destination to source" do
       destination = '/Volumes/M20'
-      source = '/Volumes/Media/2020'
+      source = '/Volumes/media/2020'
       assert_equal source, Mapper.new.find_src(destination)
     end
 
     it "maps destination to source" do
       destination = '/Volumes/M20-3'
-      source = '/Volumes/Media/2020'
+      source = '/Volumes/media/2020'
       assert_equal source, Mapper.new.find_src(destination)
     end
 
@@ -45,7 +45,7 @@ module Backup
       end
 
       it "Dir.glob is called with default location" do
-        mock(Dir).glob( '/Volumes/Media/*.lrcat') {["dir"]}
+        mock(File).expand_path( '~/SynologyDrive/Lightroom/Backups') {}
 
         Mapper.new.find_catalog_backups
       end
