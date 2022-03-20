@@ -14,7 +14,7 @@ module Backup
         source = mapper.find_src(item)
         commands.push build_command source, item, options
         if mapper.is_current_year?(item)
-          commands.push build_command mapper.find_catalog, item, options
+          commands.push build_command mapper.find_catalog_backups, item, options
         end
       end
       commands

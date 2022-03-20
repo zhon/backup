@@ -37,17 +37,17 @@ module Backup
       assert_equal source, Mapper.new.find_src(destination)
     end
 
-    describe 'find_catalog' do
+    describe 'find_catalog_backups' do
 
-      it "finds catalog on source" do
-        stub(Dir).glob { ['somepath/catalog.lrcat'] }
-        assert_equal 'somepath/catalog.lrcat', Mapper.new.find_catalog
+      it "finds catalog backups location" do
+        stub(File).expand_path { 'Backups' }
+        assert_equal 'Backups', Mapper.new.find_catalog_backups
       end
 
       it "Dir.glob is called with default location" do
         mock(Dir).glob( '/Volumes/Media/*.lrcat') {["dir"]}
 
-        Mapper.new.find_catalog
+        Mapper.new.find_catalog_backups
       end
 
     end

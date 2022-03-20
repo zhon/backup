@@ -6,6 +6,13 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+rsync -av --exclude='.DS_Store' /Volumes/CW zhon@photostore::NetBackup/
+
+rsync -av --exclude-from=/Users/zhon/.backup_excludes -e 'ssh' /Volumes/CW zhon@photostore::NetBackup/
+
+exclude from a file
+
+
 ## [0.1.1] - 2019-07-22
 
 ### Added

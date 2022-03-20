@@ -13,8 +13,8 @@ module Backup
       source = "#{@root}#{year}"
     end
 
-    def find_catalog
-      Dir.glob(SOURCE_DIR_ROOT + '*.lrcat')[0]
+    def find_catalog_backups
+      File.expand_path("~/SynologyDrive/Lightroom/Backups")
     end
 
     def two_digit_year dest
