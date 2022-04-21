@@ -10,6 +10,7 @@ require 'thor'
 require 'threadpool'
 
 require 'io/console'
+require 'timeout'
 
 # Find the backup drive in /Volumes
 # Check diff with Media to see if you can do a --delete
@@ -31,16 +32,32 @@ class CLI < Thor
     cb = Backup::CommandsBuilder.new(backup_disks, options)
     #commands = Backup::CommandsBuilder.new(backup_disks, options).commands
 
-    puts cb
-    print "Continue (Y/n): "
-    if STDIN.getch == 'n'
-      puts
-      exit 1
-    end
-    puts
-
     tp = ThreadPool.new(2)
-    cb.to_procs.map { |item| tp.push item }
+    commands = cb.to_procs
+
+    index = 0
+    cb.to_s.each_line do |line|
+      puts "#{index+=1}) " + line
+    end
+    print 'Options (a/' +  (1..index).to_a.join('/') +  '/q): '
+    option = 'a'
+    begin
+      Timeout::timeout(5) do
+        option = STDIN.getch
+      end
+    rescue Timeout::Error
+    end
+    puts option
+    case option
+    when 'a'
+      commands.map { |item| tp.push item }
+    when 1.to_s..index.to_s
+      tp.push commands[option.to_i-1]
+      #puts option
+    else
+      exit 0
+    end
+
     tp.process
     tp.finish
   end
