@@ -4,37 +4,28 @@ module Backup
 
   describe Mapper do
 
-    it 'sample rantly' do
-      skip
-      property_of {
-        range 1, 10
-      }.check {|tc|
-        count = 0
-        tp = ThreadQueue.new(tc)
-        tc.times do
-          tp.add -> { count += 1  }
-        end
-        tp.join
-        count.must_equal tc
-      }
-    end
+    describe "maps destination to source" do
 
-    it "maps destination to source" do
-      destination = '/Volumes/M19'
-      source = '/Volumes/media/2019'
-      assert_equal source, Mapper.new.find_src(destination)
-    end
+      it "without -" do
+        property_of {
+           sized(2) {string(:digit)}
+        }.check(3) { |label|
+          destination = "/Volumes/M#{label}"
+          source = "/Volumes/media/20#{label}"
+          assert_equal source, Mapper.new.find_src(destination)
+        }
+      end
 
-    it "maps destination to source" do
-      destination = '/Volumes/M20'
-      source = '/Volumes/media/2020'
-      assert_equal source, Mapper.new.find_src(destination)
-    end
+      it "with -" do
+        property_of {
+           sized(2) {string(:digit) + '-' + sized(1) {string(:digit)}}
+        }.check(3) { |label|
+          destination = "/Volumes/M#{label}"
+          source = "/Volumes/media/20#{label.split('-')[0]}"
+          assert_equal source, Mapper.new.find_src(destination)
+        }
+      end
 
-    it "maps destination to source" do
-      destination = '/Volumes/M20-3'
-      source = '/Volumes/media/2020'
-      assert_equal source, Mapper.new.find_src(destination)
     end
 
     describe 'find_catalog_backups' do
