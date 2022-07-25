@@ -2,23 +2,9 @@ require 'date'
 
 module Backup
 
-  class CommandsBuilder
-
+  class CommandBuilder
     @@command = %w{rsync -av --exclude '.DS_Store' --exclude '.Trashes' --exclude '.TemporaryItems' --exclude '.fsenventsd' }
     @@backup_dir = '/trash'
-
-    def self.commands_array_builder backup_disks, options
-      mapper = Mapper.new
-      commands = []
-      backup_disks.each do |item|
-        source = mapper.find_src(item)
-        commands.push build_command source, item, options
-        if mapper.is_current_year?(item)
-          commands.push build_command mapper.find_catalog_backups, item, options
-        end
-      end
-      commands
-    end
 
     def self.build_command source, destination, options
       commands = []
@@ -41,6 +27,23 @@ module Backup
         opts += %W{--delete --backup --backup-dir=#{backup_disk}#{@@backup_dir}}
       end
       opts
+    end
+
+  end
+
+  class CommandsBuilder
+
+    def self.commands_array_builder backup_disks, options
+      mapper = Mapper.new
+      commands = []
+      backup_disks.each do |item|
+        source = mapper.find_src(item)
+        commands.push CommandBuilder::build_command source, item, options
+        if mapper.is_current_year?(item)
+          commands.push CommandBuilder::build_command mapper.find_catalog_backups, item, options
+        end
+      end
+      commands
     end
 
     def initialize backup_disks, options={}
