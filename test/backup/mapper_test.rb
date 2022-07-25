@@ -31,14 +31,7 @@ module Backup
     describe 'find_catalog_backups' do
 
       it "finds catalog backups location" do
-        stub(File).expand_path { 'Backups' }
-        assert_equal 'Backups', Mapper.new.find_catalog_backups
-      end
-
-      it "Dir.glob is called with default location" do
-        mock(File).expand_path( '~/SynologyDrive/Lightroom/Backups') {}
-
-        Mapper.new.find_catalog_backups
+        assert_equal '/Volumes/CW/Lightroom/Backups', Mapper.new.find_catalog_backups
       end
 
     end

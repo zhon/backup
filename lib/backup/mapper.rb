@@ -3,6 +3,7 @@ module Backup
 
   class Mapper
     SOURCE_DIR_ROOT = "/Volumes/media/"
+    LR_BACKUP = "/Volumes/CW/Lightroom/Backups"
 
     def initialize root=SOURCE_DIR_ROOT
       @root = root
@@ -14,7 +15,7 @@ module Backup
     end
 
     def find_catalog_backups
-      File.expand_path("~/SynologyDrive/Lightroom/Backups")
+      LR_BACKUP
     end
 
     def two_digit_year dest
