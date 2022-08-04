@@ -33,21 +33,16 @@ module Backup
 
   class CommandsBuilder
 
-    def self.commands_array_builder backup_disks, options
-      mapper = Mapper.new
+    def self.commands_array_builder mapper, options
       commands = []
-      backup_disks.each do |item|
-        source = mapper.find_src(item)
-        commands.push CommandBuilder::build_command source, item, options
-        if mapper.is_current_year?(item)
-          commands.push CommandBuilder::build_command mapper.find_catalog_backups, item, options
-        end
+      mapper.each do |src, dest|
+        commands.push CommandBuilder::build_command src, dest, options
       end
       commands
     end
 
-    def initialize backup_disks, options={}
-      @commands = CommandsBuilder::commands_array_builder backup_disks, options
+    def initialize mapper, options={}
+      @commands = CommandsBuilder::commands_array_builder mapper, options
     end
 
     def to_s

@@ -4,11 +4,6 @@ module Backup
 
   describe DriveFinder do
 
-    it "has default args that match /Volumes" do
-      default = DriveFinder::BACK_UP_ROOT + DriveFinder::BACK_UP_EXT
-      assert_equal "/Volumes/M[1-2][0-9]{,-{2,3}}", default
-    end
-
     it "raises exception when no destination locations are found" do
       finder = DriveFinder.new '/not_a_dir'
       stub(Dir).glob { [] }
@@ -22,7 +17,7 @@ module Backup
 
     it "dirs returns array of dirs" do
       result = ['/not_really_a_dir']
-      finder = DriveFinder.new
+      finder = DriveFinder.new 'empty base dir'
       stub(Dir).glob { result }
       assert_equal result, finder.dirs
     end
@@ -38,20 +33,6 @@ module Backup
 
 
     describe 'with overridden system calls' do
-
-      it "Dir.glob is called with default args" do
-        default = DriveFinder::BACK_UP_ROOT + DriveFinder::BACK_UP_EXT
-        mock(Dir).glob( default ) {["dir"]}
-
-        DriveFinder.new.dirs
-      end
-
-      it "Dir.glob is called with default args when passed nil" do
-        default = DriveFinder::BACK_UP_ROOT + DriveFinder::BACK_UP_EXT
-        mock(Dir).glob( default ) {["dir"]}
-
-        DriveFinder.new(nil).dirs
-      end
 
       it "Dir.glob is called with specifited root args" do
         destination = "/backup_dir"

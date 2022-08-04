@@ -4,9 +4,33 @@ module Backup
   class Mapper
     SOURCE_DIR_ROOT = "/Volumes/media/"
     LR_BACKUP = "/Volumes/CW/Lightroom/Backups"
+    DEST_ROOT = "/Volumes/M"
+    DEST_EXT = "[1-2][0-9]{,-{2,3}}"
+
+    include Enumerable
+
 
     def initialize root=SOURCE_DIR_ROOT
       @root = root
+      initialize_src_dest_map
+    end
+
+    def initialize_src_dest_map
+      dest_dirs = DriveFinder.new(DEST_ROOT+DEST_EXT).dirs
+      @src_dest_map = dest_dirs.map do |item|
+        [find_src(item), item]
+      end
+
+      dest_dirs.each do |item|
+        if is_current_year? item
+          @src_dest_map << [catalog_backups, item]
+        end
+
+      end
+    end
+
+    def each(&block)
+      @src_dest_map.each &block
     end
 
     def find_src(dest)
@@ -14,7 +38,7 @@ module Backup
       source = "#{@root}#{year}"
     end
 
-    def find_catalog_backups
+    def catalog_backups
       LR_BACKUP
     end
 
