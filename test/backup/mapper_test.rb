@@ -11,6 +11,7 @@ module Backup
             '/not a drive/M21',
             '/not a drive/M22',
             '/not a drive/M23-3',
+            '/not a drive/M23-4',
           ]
         }
       end

@@ -5,7 +5,7 @@ module Backup
     SOURCE_DIR_ROOT = "/Volumes/media/"
     LR_BACKUP = "/Volumes/CW/Lightroom/Backups"
     DEST_ROOT = "/Volumes/M"
-    DEST_EXT = "[1-2][0-9]{,-{2,3}}"
+    DEST_EXT = "[1-2][0-9]{,-{2,4}}"
 
     include Enumerable
 

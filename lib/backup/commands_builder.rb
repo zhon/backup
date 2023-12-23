@@ -3,7 +3,7 @@ require 'date'
 module Backup
 
   class CommandBuilder
-    @@command = %w{rsync -av --exclude '.DS_Store' --exclude '.Trashes' --exclude '.TemporaryItems' --exclude '.fsenventsd' }
+    @@command = %w{rsync -av --exclude='.DS_Store' --exclude='.Trashes' --exclude='.TemporaryItems' --exclude='.fsenventsd' }
     @@backup_dir = '/trash'
 
     def self.build_command source, destination, options
