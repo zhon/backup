@@ -3,7 +3,7 @@ module Backup
 
   class Mapper
     SOURCE_DIR_ROOT = "/Volumes/media/"
-    LR_BACKUP = "/Volumes/CW/Lightroom/Backups"
+    LR_BACKUP = "/Volumes/Current/Lightroom/Backups"
     DEST_ROOT = "/Volumes/M"
     DEST_EXT = "[1-2][0-9]{,-{2,4}}"
 

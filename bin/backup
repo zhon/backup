@@ -57,6 +57,14 @@ class CLI < Thor
 
   default_task :backup
 
+  desc "cw2nas", ""
+  option 'dry-run', alias: '-d', type: :boolean, desc: "perform a trial run with no changes made"
+  option :delete, desc: 'delete extraneous files from dest dirs'
+  option :dest, desc: 'backup to this distination'
+  def cw2nas
+
+  end
+
 end
 
 

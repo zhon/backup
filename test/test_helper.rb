@@ -6,5 +6,5 @@ require "minitest/autorun"
 require "rr"
 
 require 'rantly'
-require 'rantly/minitest_extensions'
+#require 'rantly/minitest_extensions'
 require 'timecop'

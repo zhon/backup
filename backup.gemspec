@@ -31,12 +31,12 @@ Gem::Specification.new do |spec|
   spec.add_dependency "timeout"
 
 
-  spec.add_development_dependency "bundler", "~> 2.0"
-  spec.add_development_dependency "rake", "> 10.0"
-  spec.add_development_dependency "minitest", "~> 5.0"
-  spec.add_development_dependency "rr", "~> 3.0"
-  spec.add_development_dependency "rantly", "~> 2"
-  spec.add_development_dependency "timecop", "~> 0.9"
-  spec.add_development_dependency "guard", "~> 2.0"
-  spec.add_development_dependency "guard-minitest", "~> 2.0"
+  #spec.add_development_dependency "bundler" #, "~> 2.0"
+  #spec.add_development_dependency "rake" #, "> 10.0"
+  spec.add_development_dependency "minitest" #, "~> 5.25"
+  spec.add_development_dependency "rr" #, "~> 3.1"
+  spec.add_development_dependency "rantly" #, "~> 2"
+  spec.add_development_dependency "timecop" #, "~> 0.9"
+  spec.add_development_dependency "guard" #, "~> 2.18"
+  spec.add_development_dependency "guard-minitest" #, "~> 2.0"
 end

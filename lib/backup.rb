@@ -1,6 +1,7 @@
 require "backup/version"
 require "backup/drive_finder"
 require "backup/mapper"
+require "backup/mover"
 require "backup/commands_builder"
 
 
