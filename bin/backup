@@ -84,5 +84,4 @@ class CLI < Thor
 
 end
 
-
 CLI.start
