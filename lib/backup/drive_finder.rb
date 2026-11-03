@@ -8,7 +8,7 @@ module Backup
 
     def dirs
       dirs = Dir.glob @destination
-      raise Error.new  "Error: Missing backup drive: #@destination" if dirs.empty?
+      raise Error.new "Error: Missing backup drive: #{@destination}" if dirs.empty?
       dirs
     end
 

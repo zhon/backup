@@ -25,6 +25,7 @@ Gem::Specification.new do |spec|
   end
   spec.bindir        = "bin"
   spec.executables   = ["backup"]
+  spec.required_ruby_version = ">= 3.0"
   spec.require_paths = ["lib"]
 
   spec.add_dependency "threadpool"
