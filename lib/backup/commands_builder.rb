@@ -3,18 +3,18 @@ require 'date'
 module Backup
 
   class CommandBuilder
-    @@command = %w{rsync -av --exclude='.DS_Store' --exclude='.Trashes' --exclude='.TemporaryItems' --exclude='.fsenventsd' }
-    @@backup_dir = '/trash'
+    COMMAND = %w{rsync -av --exclude='.DS_Store' --exclude='.Trashes' --exclude='.TemporaryItems' --exclude='.fsenventsd' }.freeze
+    BACKUP_DIR = '/trash'
 
     def self.build_command source, destination, options
       commands = []
       options = options.dup
       if options[:delete]
         options[:delete] = nil
-        commands <<  @@command + opts(destination, options) + [source, destination]
+        commands <<  COMMAND + opts(destination, options) + [source, destination]
         options[:delete] = true
       end
-      commands << @@command + opts(destination, options) + [source, destination]
+      commands << COMMAND + opts(destination, options) + [source, destination]
       commands
     end
 
@@ -24,11 +24,10 @@ module Backup
         opts << "--dry-run"
       end
       if options[:delete]
-        opts += %W{--delete --backup --backup-dir=#{backup_disk}#{@@backup_dir}}
+        opts += %W{--delete --backup --backup-dir=#{backup_disk}#{BACKUP_DIR}}
       end
       opts
     end
-
   end
 
   class CommandsBuilder
