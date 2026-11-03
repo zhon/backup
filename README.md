@@ -12,7 +12,9 @@ This assumes Lightroom is on one drive called Media and the Backup drives are ca
 
 ## Usage
 
-    $bin/backup help backup
+    $ backup
+
+Options: `--dry-run`/`-d`, `--delete`, `--dest`.
 
 ## Development
 

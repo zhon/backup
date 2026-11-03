@@ -1,6 +1,4 @@
-
 module Backup
-
   class DriveFinder
 
     def initialize(destination)
@@ -15,9 +13,8 @@ module Backup
     end
 
     def remove_trailing_slash
-      @destination.chomp!('/')
+      @destination.sub!(/\/+\z/, '')
     end
 
   end
-
 end

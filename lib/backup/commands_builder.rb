@@ -52,7 +52,7 @@ module Backup
     def to_procs
       @commands.map do |item|
         -> {
-          item.map { |args| -> {system *args} }.map(&:call)
+          item.map { |args| -> { system(*args) } }.map(&:call)
         }
       end
     end

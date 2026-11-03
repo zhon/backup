@@ -39,39 +39,23 @@ module Backup
     describe "find_src maps destination to source" do
 
       it "without -" do
-        stub_df_dirs
-        property_of {
-           sized(2) {string(:digit)}
-        }.check(3) { |label|
-          destination = "/Volumes/M#{label}"
+        label = "21"
+        destination = "/Volumes/M#{label}"
 
-          any_instance_of(DriveFinder) do |klass|
-            stub(klass).dirs {
-              [ destination ]
-            }
-          end
+        stub(Dir).glob { [destination] }
 
-          source = "/Volumes/media/20#{label}"
-          assert_equal [source, destination], Mapper.new.first
-        }
+        source = "/Volumes/media/20#{label}"
+        assert_equal [source, destination], Mapper.new.first
       end
 
       it "with -" do
-        stub_df_dirs
-        property_of {
-           sized(2) {string(:digit) + '-' + sized(1) {string(:digit)}}
-        }.check(3) { |label|
-          destination = "/Volumes/M#{label}"
+        label = "21-3"
+        destination = "/Volumes/M#{label}"
 
-          any_instance_of(DriveFinder) do |klass|
-            stub(klass).dirs {
-              [ destination ]
-            }
-          end
+        stub(Dir).glob { [destination] }
 
-          source = "/Volumes/media/20#{label.split('-')[0]}"
-          assert_equal source, Mapper.new.first.first
-        }
+        source = "/Volumes/media/20#{label.split('-')[0]}"
+        assert_equal source, Mapper.new.first.first
       end
 
     end
@@ -88,7 +72,7 @@ module Backup
         Timecop.freeze(Time.new(2022, 7, 1)) do
           e = Mapper.new.each
           e.next
-          assert_equal '/Volumes/CW/Lightroom/Backups', e.next.first
+          assert_equal '/Volumes/Current/Lightroom/Backups', e.next.first
         end
       end
 

@@ -1,11 +1,11 @@
+require 'date'
 
 module Backup
-
   class Mapper
     SOURCE_DIR_ROOT = "/Volumes/media/"
     LR_BACKUP = "/Volumes/Current/Lightroom/Backups"
     DEST_ROOT = "/Volumes/M"
-    DEST_EXT = "[1-2][0-9]{,-{2,4}}"
+    DEST_PATTERN = /\AM[1-2]\d(?:-\d{1,3})?\z/
 
     include Enumerable
 
@@ -16,7 +16,10 @@ module Backup
     end
 
     def initialize_src_dest_map
-      dest_dirs = DriveFinder.new(DEST_ROOT+DEST_EXT).dirs
+      dest_dirs = DriveFinder.new(DEST_ROOT + "*").dirs.select do |item|
+        File.basename(item) =~ DEST_PATTERN
+      end
+      raise Error.new "Error: Missing backup drive: #{DEST_ROOT}*" if dest_dirs.empty?
       @src_dest_map = dest_dirs.map do |item|
         [find_src(item), item]
       end
@@ -25,17 +28,16 @@ module Backup
         if is_current_year? item
           @src_dest_map << [catalog_backups, item]
         end
-
       end
     end
 
     def each(&block)
-      @src_dest_map.each &block
+      @src_dest_map.each(&block)
     end
 
     def find_src(dest)
       year = '20' + two_digit_year(dest)
-      source = "#{@root}#{year}"
+      "#{@root}#{year}"
     end
 
     def catalog_backups
@@ -44,7 +46,7 @@ module Backup
 
     def two_digit_year dest
       dest =~ /.*M(\d\d)/
-      $1
+      $1 or raise Error.new("Error: cannot determine year from #{dest}")
     end
 
     def is_current_year?(backup_disk)
@@ -52,5 +54,4 @@ module Backup
     end
 
   end
-
 end
