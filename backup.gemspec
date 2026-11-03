@@ -28,7 +28,6 @@ Gem::Specification.new do |spec|
   spec.required_ruby_version = ">= 3.0"
   spec.require_paths = ["lib"]
 
-  spec.add_dependency "threadpool"
   spec.add_dependency "timeout"
 
 

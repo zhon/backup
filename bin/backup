@@ -7,8 +7,6 @@ require 'backup'
 
 require 'thor'
 
-require 'threadpool'
-
 require 'io/console'
 require 'timeout'
 
@@ -28,14 +26,13 @@ class CLI < Thor
     mapper.move_destinations!
     cb = Backup::CommandsBuilder.new(mapper, options)
 
-    tp = ThreadPool.new(2)
     commands = cb.to_procs
 
     index = 0
     cb.to_s.each_line do |line|
-      puts "#{index+=1}) " + line
+      puts "#{index += 1}) " + line
     end
-    print 'Options (a/' +  (1..index).to_a.join('/') +  '/q): '
+    print 'Options (a/' + (1..index).to_a.join('/') + '/q): '
     option = 'a'
     begin
       Timeout::timeout(5) do
@@ -44,17 +41,16 @@ class CLI < Thor
     rescue Timeout::Error
     end
     puts option
-    case option
-    when 'a'
-      commands.map { |item| tp.push item }
-    when 1.to_s..index.to_s
-      tp.push commands[option.to_i-1]
-    else
-      exit 0
-    end
 
-    tp.process
-    tp.finish
+    selected =
+      case option
+      when 'a' then commands
+      when 1.to_s..index.to_s then [commands[option.to_i - 1]]
+      else
+        exit 0
+      end
+
+    run_with_threads(selected, 2)
   end
 
   default_task :backup
@@ -65,6 +61,25 @@ class CLI < Thor
   option :dest, desc: 'backup to this distination'
   def cw2nas
 
+  end
+
+  private
+
+  def run_with_threads(jobs, max)
+    queue = Queue.new
+    jobs.each { |job| queue << job }
+    max.times { queue << :done }
+
+    workers = max.times.map do
+      Thread.new do
+        loop do
+          job = queue.pop
+          break if job == :done
+          job.call
+        end
+      end
+    end
+    workers.each(&:join)
   end
 
 end

@@ -1,14 +1,7 @@
-GIT
-  remote: https://github.com/zhon/threadpool
-  revision: 7e37994e6d1fcd32cfeef66816491e2020f78ca1
-  specs:
-    threadpool (0.1.0)
-
 PATH
   remote: .
   specs:
     backup (0.1.1)
-      threadpool
       timeout
 
 GEM
@@ -69,7 +62,6 @@ DEPENDENCIES
   rake
   rantly
   rr
-  threadpool!
   timecop
 
 BUNDLED WITH
