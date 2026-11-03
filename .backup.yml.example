@@ -1,0 +1,4 @@
+# ~/.backup.yml
+source_dir_root: /Volumes/media/
+lr_backup: /Volumes/Current/Lightroom/Backups
+dest_root: /Volumes/M

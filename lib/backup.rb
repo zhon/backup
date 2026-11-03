@@ -1,4 +1,5 @@
 require "backup/version"
+require "backup/config"
 require "backup/drive_finder"
 require "backup/mapper"
 require "backup/mover"

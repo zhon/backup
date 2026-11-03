@@ -16,6 +16,16 @@ This assumes Lightroom is on one drive called Media and the Backup drives are ca
 
 Options: `--dry-run`/`-d`, `--delete`, `--dest`.
 
+## Configuration
+
+Paths are configurable via `~/.backup.yml` (or `BACKUP_CONFIG=/path/to.yml`):
+
+    source_dir_root: /Volumes/media/
+    lr_backup: /Volumes/Current/Lightroom/Backups
+    dest_root: /Volumes/M
+
+Defaults are used when no config file exists.
+
 ## Development
 
 After checking out the repo, run `bin/setup` to install dependencies. Then, run `rake test` to run the tests. You can also run `bin/console` for an interactive prompt that will allow you to experiment.
@@ -27,7 +37,5 @@ To install this gem onto your local machine, run `bundle exec rake install`. To 
 Bug reports and pull requests are welcome on GitHub at https://github.com/[USERNAME]/backup.
 
 ## Todo
-
-Allow Mappings to come from a config file.
 
 Don't backup a corrupted file (I don't know how to do this yet).

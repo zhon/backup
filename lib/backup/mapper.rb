@@ -2,9 +2,9 @@ require 'date'
 
 module Backup
   class Mapper
-    SOURCE_DIR_ROOT = "/Volumes/media/"
-    LR_BACKUP = "/Volumes/Current/Lightroom/Backups"
-    DEST_ROOT = "/Volumes/M"
+    SOURCE_DIR_ROOT = Backup::Config.source_dir_root
+    LR_BACKUP = Backup::Config.lr_backup
+    DEST_ROOT = Backup::Config.dest_root
     DEST_PATTERN = /\AM[1-2]\d(?:-\d{1,3})?\z/
 
     include Enumerable
