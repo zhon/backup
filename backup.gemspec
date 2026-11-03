@@ -9,7 +9,7 @@ Gem::Specification.new do |spec|
   spec.email         = ["zhon@xmisson.com"]
 
   spec.summary       = %q{Backup images from server to a backup drive}
-  #spec.description   = %q{TODO: Write a longer description or delete this line.}
+  spec.description   = %q{Backup Lightroom photos and catalog to per-year drives (M20, M21-2, ...).}
   spec.homepage      = "https://github.com/zhon/backup"
 
   #spec.metadata["allowed_push_host"] = "TODO: Set to 'http://mygemserver.com'"

@@ -6,11 +6,23 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [0.2.0] - 2026-11-02
+
 ### Added
-- UI for selecting what to backup (defauls to all after timeout)
+- Configurable paths via ~/.backup.yml (source_dir_root, lr_backup, dest_root)
+- Mover for renaming destination folders to match descriptive source names
+- GitHub Actions CI on Ruby 4
 
-- exclude from a file
+### Changed
+- Dropped custom threadpool gem; use stdlib Thread + Queue
+- Removed empty cw2nas command
+- Modernized for Ruby 3.x/4.x (Dir.exist?, FileUtils array handling, Minitest)
+- Fixed backup-drive glob pattern and nil-year guard
+- Gem packaging: bin/backup executable, changelog URI, required_ruby_version
 
+### Fixed
+- DriveFinder trailing-slash handling
+- Mapper date/year parsing
 
 ## [0.1.1] - 2019-07-22
 
@@ -24,4 +36,3 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Requires ```bundle exec``` to run because of unrelease verstion of 'threadpool'
 
 ## [0.1.0] - 2019-07-22
-
