@@ -49,6 +49,13 @@ module Backup
       $1 or raise Error.new("Error: cannot determine year from #{dest}")
     end
 
+    def move_destinations!
+      @src_dest_map.map! do |src, dest|
+        new_dest = Mover.move_destination(src, dest)
+        [src, new_dest || dest]
+      end
+    end
+
     def is_current_year?(backup_disk)
       two_digit_year(backup_disk) == Date.today.year.to_s[-2..-1]
     end

@@ -4,49 +4,40 @@ module Backup
 
   describe Mover do
 
-    def stub_df_dirs
-      any_instance_of(DriveFinder) do |klass|
-        stub(klass).dirs {
-          [
-            '/not a drive/M21',
-            '/not a drive/M22',
-            '/not a drive/M23-3',
-          ]
-        }
-      end
-    end
+    require 'tmpdir'
+    require 'fileutils'
 
     describe "move_destination" do
 
-      describe "doesn't move" do
+      it "doesn't move when src is only a date" do
+        dir = Dir.mktmpdir("backup-mover-tests-", "/tmp")
+        at_exit { FileUtils.remove_entry(dir) }
+        dest = "#{dir}/backup/2022-07-02"
+        src = "#{dir}/src/2022-07-02"
+        FileUtils.mkdir_p(dest)
+        FileUtils.mkdir_p(src)
 
-        it "when src is only a date" do
-            
+        Mover::move_destination(src, dest)
 
-        end
-
-
+        assert Dir.exist? "#{dir}/backup/2022-07-02"
       end
-      require 'tmpdir'
-      require 'fileutils'
 
-
-      it "" do
-        skip "Mover implementation pending design review"
-
-        dir = Dir.mktmpdir("backup-mapper-tests-", "/tmp")
+      it "renames dest to src's descriptive name" do
+        dir = Dir.mktmpdir("backup-mover-tests-", "/tmp")
         at_exit { FileUtils.remove_entry(dir) }
 
-
-        dest = FileUtils.mkdir_p("#{dir}/backup/2022-07-02")
-        src = FileUtils.mkdir_p("#{dir}/src/2022-07-02 More After")
-
+        dest = "#{dir}/backup/2022-07-02"
+        src = "#{dir}/src/2022-07-02 More After"
+        FileUtils.mkdir_p(dest)
+        FileUtils.mkdir_p(src)
 
         Mover::move_destination(src, dest)
 
         assert Dir.exist? "#{dir}/backup/2022-07-02 More After"
       end
+
     end
+
   end
 
 end

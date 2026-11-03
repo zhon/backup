@@ -24,7 +24,9 @@ class CLI < Thor
   option :delete, desc: 'delete extraneous files from dest dirs'
   option :dest, desc: 'backup to this distination'
   def backup
-    cb = Backup::CommandsBuilder.new(Backup::Mapper.new, options)
+    mapper = Backup::Mapper.new
+    mapper.move_destinations!
+    cb = Backup::CommandsBuilder.new(mapper, options)
 
     tp = ThreadPool.new(2)
     commands = cb.to_procs
